@@ -6,7 +6,7 @@ eval(UrlFetchApp.fetch("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/
  */
 function addNewWeek() {
     console.log('Start addNewWeek');
-    var sheet = getSheet('PM test');
+    var sheet = getSheet('Project Managment');
     var ss = getSpreadSheet();
     var baseCol = getNamedRangeByName(ss, 'status').getColumn();
     var maxCol = sheet.getMaxColumns();
@@ -20,23 +20,31 @@ function addNewWeek() {
         sheet.setColumnWidths(maxCol + 1, 2, 40);
         sheet.getRange(1, maxCol + 1).setValue(formatDate(nextDate));
         sheet.getRange(1, maxCol + 1, 1, 2).merge();
-        decorNewDay(sheet);
+        decorLastDay(sheet);
         nextDate.add(1, 'day');
         maxCol = maxCol + 2;
     }
-    decorNewWeek(sheet);
+    decorLastWeek(sheet);
 }
 
 
-function decorNewWeek(sheet) {
+/**
+ * Decorate the lastest week range.
+ * @param   {Object} sheet A sheet object.
+ */
+function decorLastWeek(sheet) {
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
     sheet.getRange(1, maxCol - 9, maxRow - 1, 10)
-    .setBorder(false, true, false, true, null, null, "gray", SpreadsheetApp.BorderStyle.SOLID_MEDIUM); 
+        .setBorder(false, true, false, true, null, null, "gray", SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
 }
 
 
-function decorNewDay(sheet) {
+/**
+ * Decorate the lastest day column.
+ * @param   {Object} sheet A sheet object.
+ */
+function decorLastDay(sheet) {
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
     sheet.getRange(1, maxCol - 1, maxRow - 1, 2)
@@ -44,7 +52,12 @@ function decorNewDay(sheet) {
 }
 
 
-function getLastColValue (sheet) {
+/**
+ * Get a date string from the last day column of Gantt chart.
+ * @param   {Object} sheet A sheet object.
+ * @return  {String} The last date string. 
+ */
+function getLastColValue(sheet) {
     var maxCol = sheet.getLastColumn();
     var aryValues = sheet.getRange(1, maxCol - 2, 1, 2).getValues();
     if (aryValues[0][0] !== "") return aryValues[0][0];
@@ -52,13 +65,12 @@ function getLastColValue (sheet) {
 }
 
 
-function parseDayOfWeek(date) {
-    var aryDate = date.split('\n');
-    return aryDate[0];
-}
-
-
-function parseMoment(date) {
+/**
+ * Get a moment object from the last date string of the Gantt chart.
+ * @param   {String} date A string date.
+ * @return  {Object} A moment object. 
+ */
+function getLastMoment(date) {
     var aryDate = date.split('\n');
     var ddMMM = aryDate[1].split(' ');
     var date = moment();
@@ -66,12 +78,22 @@ function parseMoment(date) {
 }
 
 
+/**
+ * Get a moment object of the next monday.
+ * @param   {Object} lastDate A moment object.
+ * @return  {Object} A new moment object. 
+ */
 function getNextMonday(lastDate) {
     var monday = lastDate.isoWeekday(1).add(1, 'week');
     return monday;
 }
 
 
+/**
+ * Parse a string from a moment date and format it.
+ * @param   {Object} date A moment object.
+ * @return  {String} A formatted string of a date.
+ */
 function formatDate(date) {
     var newdate = date.format('dddd DD MMM');
     var arydate = newdate.split(' ');
