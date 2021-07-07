@@ -1,0 +1,21 @@
+{
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Sheets",
+        "version": "v4",
+        "serviceId": "sheets"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "addOns": {
+    "sheets": {
+      "homepageTrigger": {
+        "runFunction": "proposalShowPopup"
+      }
+    }
+  }
+}

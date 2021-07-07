@@ -1,0 +1,28 @@
+{
+  "name": "pmsheet",
+  "version": "1.0.0",
+  "description": "automate some boring stuffs on PM sheet",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitahoang/pmsheet.git"
+  },
+  "keywords": [
+    "pm"
+  ],
+  "author": "vitahoang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitahoang/pmsheet/issues"
+  },
+  "homepage": "https://github.com/vitahoang/pmsheet#readme",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.35",
+    "clasp": "^1.0.0",
+    "moment": "^2.29.1",
+    "typescript": "^4.3.5"
+  }
+}
