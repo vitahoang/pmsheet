@@ -6,7 +6,7 @@ eval(UrlFetchApp.fetch("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/
  */
 function addNewWeek() {
     console.log('Start addNewWeek');
-    var sheet = getSheet('Project Managment');
+    var sheet = getSheet('Project Management');
     var ss = getSpreadSheet();
     var baseCol = getNamedRangeByName(ss, 'status').getColumn();
     var maxCol = sheet.getMaxColumns();
