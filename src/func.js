@@ -1,5 +1,3 @@
-// Import momentjs lib
-eval(UrlFetchApp.fetch("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js").getContentText());
 
 /**
  * Add a new week in the gantt chart timeline
@@ -12,7 +10,7 @@ function addNewWeek() {
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
     var lastColDate = getLastColValue(sheet);
-    var lastDate = parseMoment(lastColDate);
+    var lastDate = getLastMoment(lastColDate);
     var nextDate = getNextMonday(lastDate);
 
     for (var i = 0; i < 5; i++) {
