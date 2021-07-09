@@ -10,6 +10,6 @@ function onOpen(e) {
   var ui = SpreadsheetApp.getUi();
   var menu = ui.createMenu("Gantt Chart");
   menu.addItem("Add a new week", "addNewWeek");
-  menu.addItem("Format the timeline", "formatGanttime");
+  menu.addItem("Format timeline", "formatGanttime");
   menu.addToUi();
 }

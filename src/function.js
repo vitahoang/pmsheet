@@ -1,5 +1,3 @@
-const { fn } = require("moment");
-
 /**
  * Add a new week in the gantt chart timeline
  */
@@ -15,13 +13,13 @@ function addNewWeek() {
     for (var i = 0; i < 5; i++) {
         sheet.insertColumnsAfter(maxCol, 2);
         sheet.setColumnWidths(maxCol + 1, 2, 40);
-        sheet.getRange(1, maxCol + 1).setValue(formatDate(nextMoment));
-        sheet.getRange(1, maxCol + 1, 1, 2).merge();
+        sheet.getRange(1, maxCol + 1)
+            .setValue(formatDate(nextMoment));
         decorLastDay(sheet);
         nextMoment.add(1, 'day');
         maxCol = maxCol + 2;
     }
-    decorLastWeek(sheet);
+    decorLastWeek(maxCol, maxRow, sheet);
 }
 
 /**
@@ -32,18 +30,18 @@ function formatGanttime(sheet) {
     var baseCol = getBaseCol(sheet);
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
-    var maxWeek = (maxCol - baseCol) / 5;
+    var maxDay = (maxCol - baseCol) / 2;
 
-    for (var i = 0; i < maxCol; i++) {
-        var dailyCol = sheet.getRange(1,baseCol + 1, maxRow, 2);
+    for (var i = 0; i < maxDay; i++) {
+        var dailyCol = sheet.getRange(1, baseCol + 1, maxRow, 2);
         decorAday(dailyCol);
         baseCol = baseCol + 2;
     }
     var baseCol = getBaseCol(sheet);
 
-    for (var i = 0; i < maxWeek; i++) {
-        var weeklyRange = sheet.getRange(1, baseCol + 1, maxRow, 10);
-        weeklyRange.setBorder = (false, true, false, true, null, null, "gray", SpreadsheetApp.BorderStyle.SOLID_MEDIUM)
+    while (maxCol > baseCol) {
+        decorLastWeek(maxCol, maxRow, sheet)
+        maxCol = maxCol - 10;
     }
 }
 
@@ -51,7 +49,7 @@ function formatGanttime(sheet) {
 /**
 * Get a base column of the Gantt timeline.
 * @param   {Object} sheet A sheet object.
-* @return  {Integer} The starting column position of the base column in the sheet.
+* @return  {Number} The starting column position of the base column in the sheet.
 */
 function getBaseCol(sheet) {
     return sheet.getRange('E:E')
@@ -59,52 +57,10 @@ function getBaseCol(sheet) {
 }
 
 
-
-/**
- * Decorate the lastest week range.
- * @param   {Object} sheet A sheet object.
- */
-function decorLastWeek(sheet) {
-    var maxCol = sheet.getMaxColumns();
-    var maxRow = sheet.getMaxRows();
-    sheet.getRange(1, maxCol - 9, maxRow - 1, 10)
-        .setBorder(false, true, false, true, null, null, "gray", SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
-}
-
-/**
-* Decorate a weekly column of the Gantt timeline.
-* @param   {Object} weeklyrange A range object which represents for a weekly column.
-*/
-
-
-/**
- * Decorate the lastest day column.
- * @param   {Object} sheet A sheet object.
- */
-function decorLastDay(sheet) {
-    var maxCol = sheet.getMaxColumns();
-    var maxRow = sheet.getMaxRows();
-    sheet.getRange(1, maxCol - 1, maxRow - 1, 2)
-        .setBorder(false, true, false, true, false, false, "gray", SpreadsheetApp.BorderStyle.DOTTED);
-}
-
-
-/**
-* Decorate a daily column of the Gantt timeline.
-* @param   {Object} dailyRange A range object which represents for a daily column.
-*/
-function decorAday(dailyRange) {
-    var rangeHeader = dailyRange.offset(0,0,1,2);
-    dailyRange.setBorder(false, true, false, true, false, false, "gray", SpreadsheetApp.BorderStyle.DOTTED);
-    rangeHeader.setTextStyle(dailyHeaderStyle);
-}
-
-
-
 /**
  * Get a date string from the last date column of Gantt chart.
  * @param   {Object} sheet A sheet object.
- * @param   {Integer} dailyCol A number represents for the first column of a daily column.
+ * @param   {Number} dailyCol A number represents for the first column of a daily column.
  * @return  {String} A string of the last day of the Gant chart formatted as "dddd \n DD MMM".
  */
 function getDateOfColumn(sheet, dailyCol) {
