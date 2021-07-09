@@ -45,12 +45,12 @@ function getDocProperty(key) {
 
 /**
  * Search a named range by its name and return its range object.
- * @param   {Object} ss    Google Spreadsheet file object.
+ * @param   {Object} spreadsheet    A Google Spreadsheet file object.
  * @param   {String} name  A name of a named range.
  * @return  {Object} A range object. 
  */
-function getNamedRangeByName(ss, name) {
-  var namedRanges = ss.getNamedRanges();
+function getNamedRangeByName(spreadsheet, name) {
+  var namedRanges = spreadsheet.getNamedRanges();
   if (namedRanges.length > 0) {
     for (var i = 0; i < namedRanges.length; i++) {
       if (namedRanges[i].getName() == name) {
