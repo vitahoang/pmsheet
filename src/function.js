@@ -1,11 +1,14 @@
 /**
  * Add a new week in the gantt chart timeline
  */
+var sheetname = 'Project Management'
+
 function addNewWeek() {
     console.log('Start addNewWeek');
-    var sheet = getSheet('PM test');
+    var sheet = getSheet(sheetname);
     var lastDayCol = sheet.getLastColumn() - 2;
     var maxCol = sheet.getMaxColumns();
+    var maxRow = sheet.getMaxRows();
     var lastColDate = getDateOfColumn(sheet, lastDayCol);
     var lastColMoment = getMomentOfDate(lastColDate);
     var nextMoment = getNextMonday(lastColMoment);
@@ -15,10 +18,14 @@ function addNewWeek() {
         sheet.setColumnWidths(maxCol + 1, 2, 40);
         sheet.getRange(1, maxCol + 1)
             .setValue(formatDate(nextMoment));
+        sheet.getRange(1, maxCol + 1, 1, 2)
+            .merge()
+            .setTextStyle(dailyHeaderStyle);
         decorLastDay(sheet);
         nextMoment.add(1, 'day');
         maxCol = maxCol + 2;
     }
+    maxcol = sheet.getMaxColumns();
     decorLastWeek(maxCol, maxRow, sheet);
 }
 
@@ -26,7 +33,7 @@ function addNewWeek() {
 * Format the Gantt timeline.
 */
 function formatGanttime(sheet) {
-    var sheet = getSheet('PM test');
+    var sheet = getSheet(sheetname);
     var baseCol = getBaseCol(sheet);
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
@@ -52,7 +59,7 @@ function formatGanttime(sheet) {
 * @return  {Number} The starting column position of the base column in the sheet.
 */
 function getBaseCol(sheet) {
-    return sheet.getRange('E:E')
+    return sheet.getRange('F:F')
         .getColumn();
 }
 
