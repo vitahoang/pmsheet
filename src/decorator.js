@@ -38,9 +38,9 @@ function decorAday(dailyRange) {
 
 
 /**
-* Format a header of a task.
+* Decorate a header of a task.
 * @param   {Number} rowId A row ID of the header.
-* @param   {Object} sheet A sheet which contains the header.
+* @param   {Object} sheet A sheet which contains the task.
 */
 function decorTaskHeader(rowId, sheet) {
   var maxCol = sheet.getMaxColumns();
