@@ -1,15 +1,12 @@
-const ts = require("typescript");
-
 var ganttSheet = 'PM test';
 var templateSheet = 'Template Backup';
-
 
 
 /**
  * Add a new week in the gantt chart timeline
 * @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
  */
-function addNewWeek(ganttSheet) {
+function addNewWeek() {
     console.log('Start addNewWeek');
     var sheet = getSheet(ganttSheet);
     var lastDayCol = sheet.getLastColumn() - 2;
@@ -39,7 +36,7 @@ function addNewWeek(ganttSheet) {
 * Format the Gantt timeline.
 * @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
 */
-function formatGanttime(ganttSheet) {
+function formatGanttime() {
     console.log('Start formatGanttime');
     var sheet = getSheet(ganttSheet);
     var baseCol = getBaseCol(sheet);
@@ -65,15 +62,14 @@ function formatGanttime(ganttSheet) {
 * Add a new release to the Gantt Chart.
 * @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
 */
-function addNewRelease(ganttSheet, templateSheet) {
+function addNewRelease() {
     console.log('Start addNewRelease');
     var gSheet = getSheet(ganttSheet);
     var tSheet = getSheet(templateSheet);
-    var baseCol = getBaseCol(sheet);
-    var fromRange = tSheet.getRange(2, 1, tSheet.getLastRow(), baseCol);
-    gSheet.insertRows(gSheet.getLastRow, tSheet.getLastRow() - 1);
-    var toRange = gSheet.getRange(gSheet.getLastRow + 1, 1, tSheet.getLastRow() - 1, baseCol);
-
+    var baseCol = getBaseCol(gSheet);
+    var fromRange = tSheet.getRange(2, 1, tSheet.getLastRow() - 1, baseCol);
+    gSheet.insertRowsAfter(gSheet.getLastRow(), tSheet.getLastRow() - 1);
+    var toRange = gSheet.getRange(gSheet.getLastRow() + 1, 1, tSheet.getLastRow() - 1, baseCol);
     copyRange(fromRange, toRange);
 }
 
