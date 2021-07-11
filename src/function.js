@@ -1,88 +1,11 @@
-var ganttSheet = 'PM test';
-var templateSheet = 'Template Backup';
-
-
-/**
- * Add a new week in the gantt chart timeline
-* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
- */
-function addNewWeek() {
-    console.log('Start addNewWeek');
-    var sheet = getSheet(ganttSheet);
-    var lastDayCol = sheet.getLastColumn() - 2;
-    var maxCol = sheet.getMaxColumns();
-    var maxRow = sheet.getMaxRows();
-    var lastColDate = getDateOfColumn(sheet, lastDayCol);
-    var lastColMoment = getMomentOfDate(lastColDate);
-    var nextMoment = getNextMonday(lastColMoment);
-
-    for (var i = 0; i < 5; i++) {
-        sheet.insertColumnsAfter(maxCol, 2);
-        sheet.setColumnWidths(maxCol + 1, 2, 40);
-        sheet.getRange(1, maxCol + 1)
-            .setValue(formatDate(nextMoment));
-        sheet.getRange(1, maxCol + 1, 1, 2)
-            .merge()
-            .setTextStyle(dailyHeaderStyle);
-        decorLastDay(sheet);
-        nextMoment.add(1, 'day');
-        maxCol = maxCol + 2;
-    }
-    maxcol = sheet.getMaxColumns();
-    decorLastWeek(maxCol, maxRow, sheet);
-}
-
-/**
-* Format the Gantt timeline.
-* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
-*/
-function formatGanttime() {
-    console.log('Start formatGanttime');
-    var sheet = getSheet(ganttSheet);
-    var baseCol = getBaseCol(sheet);
-    var maxCol = sheet.getMaxColumns();
-    var maxRow = sheet.getMaxRows();
-    var maxDay = (maxCol - baseCol) / 2;
-
-    for (var i = 0; i < maxDay; i++) {
-        var dailyCol = sheet.getRange(1, baseCol + 1, maxRow, 2);
-        decorAday(dailyCol);
-        baseCol = baseCol + 2;
-    }
-    var baseCol = getBaseCol(sheet);
-
-    while (maxCol > baseCol) {
-        decorLastWeek(maxCol, maxRow, sheet)
-        maxCol = maxCol - 10;
-    }
-}
-
-
-/**
-* Add a new release to the Gantt Chart.
-* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
-*/
-function addNewRelease() {
-    console.log('Start addNewRelease');
-    var gSheet = getSheet(ganttSheet);
-    var tSheet = getSheet(templateSheet);
-    var baseCol = getBaseCol(gSheet);
-    var fromRange = tSheet.getRange(2, 1, tSheet.getLastRow() - 1, baseCol);
-    gSheet.insertRowsAfter(gSheet.getLastRow(), tSheet.getLastRow() - 1);
-    var toRange = gSheet.getRange(gSheet.getLastRow() + 1, 1, tSheet.getLastRow() - 1, baseCol);
-    copyRange(fromRange, toRange);
-}
-
-
-
 /**
 * Get a base column of the Gantt timeline.
 * @param   {Object} sheet A sheet object.
 * @return  {Number} The starting column position of the base column in the sheet.
 */
 function getBaseCol(sheet) {
-    return sheet.getRange('F:F')
-        .getColumn();
+  return sheet.getRange('F:F')
+    .getColumn();
 }
 
 
@@ -93,9 +16,9 @@ function getBaseCol(sheet) {
  * @return  {String} A string of the last day of the Gant chart formatted as "dddd \n DD MMM".
  */
 function getDateOfColumn(sheet, dailyCol) {
-    var aryValues = sheet.getRange(1, dailyCol - 2, 1, 2).getValues();
-    if (aryValues[0][0] !== "") return aryValues[0][0];
-    else return aryValues[0][1];
+  var aryValues = sheet.getRange(1, dailyCol - 2, 1, 2).getValues();
+  if (aryValues[0][0] !== "") return aryValues[0][0];
+  else return aryValues[0][1];
 }
 
 
@@ -105,10 +28,10 @@ function getDateOfColumn(sheet, dailyCol) {
  * @return  {Object} A moment object. 
  */
 function getMomentOfDate(date) {
-    var aryDate = date.split('\n');
-    var ddMMM = aryDate[1].split(' ');
-    var date = moment();
-    return date.month(ddMMM[1]).date(ddMMM[0]);
+  var aryDate = date.split('\n');
+  var ddMMM = aryDate[1].split(' ');
+  var date = moment();
+  return date.month(ddMMM[1]).date(ddMMM[0]);
 }
 
 
@@ -118,8 +41,8 @@ function getMomentOfDate(date) {
  * @return  {Object} A new moment object of the next monday. 
  */
 function getNextMonday(lastColMoment) {
-    var monday = lastColMoment.isoWeekday(1).add(1, 'week');
-    return monday;
+  var monday = lastColMoment.isoWeekday(1).add(1, 'week');
+  return monday;
 }
 
 
@@ -129,8 +52,25 @@ function getNextMonday(lastColMoment) {
  * @return  {String} A string of a date formatted as "dddd \n DD MMM".
  */
 function formatDate(date) {
-    var newdate = date.format('dddd DD MMM');
-    var arydate = newdate.split(' ');
-    newdate = arydate[0] + '\n' + arydate[1] + ' ' + arydate[2];
-    return newdate;
+  var newdate = date.format('dddd DD MMM');
+  var arydate = newdate.split(' ');
+  newdate = arydate[0] + '\n' + arydate[1] + ' ' + arydate[2];
+  return newdate;
+}
+
+
+/**
+* Copy value and format from a range to another range.
+* @param   {Object} tSheet A sheet which contains the release template.
+* @param   {Object} gSheet A sheet where the release will be insert to.
+*/
+function createTaskFromTemplate(tSheet, gSheet) {
+  var baseCol = getBaseCol(gSheet);
+  var g_lastRowID = gSheet.getLastRow();
+  var t_lastRowID = tSheet.getLastRow();
+  var fromRange = tSheet.getRange(2, 1, t_lastRowID - 1, baseCol);
+  gSheet.insertRowsAfter(g_lastRowID, tSheet.getLastRow() - 1);
+  var toRange = gSheet.getRange(g_lastRowID + 1, 1, t_lastRowID - 1, baseCol);
+  fromRange.copyTo(toRange);
+  decorTaskHeader(g_lastRowID + 1, gSheet);
 }

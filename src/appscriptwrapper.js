@@ -62,13 +62,3 @@ function getNamedRangeByName(spreadsheet, name) {
     console.log("The range " + name + " doesn't exist");
   }
 }
-
-
-/**
-* Copy value and format from a range to another range.
-* @param   {Object} fromRange A range where to copy from.
-* @param   {Object} toRange A range where to paste to.
-*/
-function copyRange(fromRange, toRange) {
-    fromRange.copyTo(toRange);
-}
