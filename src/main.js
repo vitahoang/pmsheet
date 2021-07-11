@@ -1,4 +1,4 @@
-var ganttSheet = 'PM test';
+var ganttSheet = 'Project Management';
 var templateSheet = 'Template Backup';
 
 

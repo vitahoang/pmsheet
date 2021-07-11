@@ -20,9 +20,18 @@
   },
   "homepage": "https://github.com/vitahoang/pmsheet#readme",
   "dependencies": {
+    "@google/clasp": "^2.4.0",
     "@types/google-apps-script": "^1.0.35",
     "clasp": "^1.0.0",
     "moment": "^2.29.1",
     "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
