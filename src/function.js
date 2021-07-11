@@ -1,11 +1,17 @@
+const ts = require("typescript");
+
+var ganttSheet = 'PM test';
+var templateSheet = 'Template Backup';
+
+
+
 /**
  * Add a new week in the gantt chart timeline
+* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
  */
-var sheetname = 'Project Management'
-
-function addNewWeek() {
+function addNewWeek(ganttSheet) {
     console.log('Start addNewWeek');
-    var sheet = getSheet(sheetname);
+    var sheet = getSheet(ganttSheet);
     var lastDayCol = sheet.getLastColumn() - 2;
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
@@ -31,9 +37,11 @@ function addNewWeek() {
 
 /**
 * Format the Gantt timeline.
+* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
 */
-function formatGanttime(sheet) {
-    var sheet = getSheet(sheetname);
+function formatGanttime(ganttSheet) {
+    console.log('Start formatGanttime');
+    var sheet = getSheet(ganttSheet);
     var baseCol = getBaseCol(sheet);
     var maxCol = sheet.getMaxColumns();
     var maxRow = sheet.getMaxRows();
@@ -51,6 +59,24 @@ function formatGanttime(sheet) {
         maxCol = maxCol - 10;
     }
 }
+
+
+/**
+* Add a new release to the Gantt Chart.
+* @param   {String} ganttSheet Name of the sheet that stores the Gantt Chart.
+*/
+function addNewRelease(ganttSheet, templateSheet) {
+    console.log('Start addNewRelease');
+    var gSheet = getSheet(ganttSheet);
+    var tSheet = getSheet(templateSheet);
+    var baseCol = getBaseCol(sheet);
+    var fromRange = tSheet.getRange(2, 1, tSheet.getLastRow(), baseCol);
+    gSheet.insertRows(gSheet.getLastRow, tSheet.getLastRow() - 1);
+    var toRange = gSheet.getRange(gSheet.getLastRow + 1, 1, tSheet.getLastRow() - 1, baseCol);
+
+    copyRange(fromRange, toRange);
+}
+
 
 
 /**
