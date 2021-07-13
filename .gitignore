@@ -1,5 +1,6 @@
 # Project file
 /refer
+.DS_Store
 
 # Logs
 logs

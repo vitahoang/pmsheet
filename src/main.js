@@ -44,7 +44,7 @@ function formatGanttime() {
 
   for (var i = 0; i < maxDay; i++) {
     var dailyCol = sheet.getRange(1, baseCol + 1, maxRow, 2);
-    decorAday(dailyCol);
+    decorDay(dailyCol);
     baseCol = baseCol + 2;
   }
   var baseCol = getBaseCol(sheet);
